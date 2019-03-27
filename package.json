@@ -1,0 +1,24 @@
+{
+  "name": "default",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export"
+  },
+  "dependencies": {
+    "@zeit/next-css": "^0.2.0",
+    "classnames": "^2.2.6",
+    "next": "6.1.1",
+    "react": "16.4.2",
+    "react-dom": "16.4.2"
+  },
+  "description": "",
+  "version": "1.0.0",
+  "devDependencies": {},
+  "keywords": [
+    "next.js"
+  ],
+  "author": "Kompaniets A.",
+  "homepage": ""
+}

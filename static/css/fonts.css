@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'Exo2.0 Thin';
+  src: url('../fonts/Exo2.0-Thin.otf'),
+       url('../fonts/exo-20-thin_[allfont.ru].ttf');
+}
+
+@font-face {
+  font-family: 'TrebuchetMS';
+  src: url('../fonts/TrebuchetMS.woff') format('woff2'),
+       url('../fonts/TrebuchetMS.ttf') format('ttf'),
+       url('../fonts/TrebuchetMS.eot') format('eot');
+}
+
+@font-face {
+  font-family: 'TrebuchetMS Bold';
+  src: url('../fonts/TrebuchetMS-Bold.woff') format('woff2'),
+       url('../fonts/TrebuchetMS-Bold.ttf') format('ttf'),
+       url('../fonts/TrebuchetMS-Bold.eot') format('eot');
+}
