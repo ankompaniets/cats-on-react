@@ -1,7 +1,8 @@
 @font-face {
   font-family: 'Exo2.0 Thin';
   src: url('../fonts/Exo2.0-Thin.otf'),
-       url('../fonts/exo-20-thin_[allfont.ru].ttf');
+       url('../fonts/exo-20-thin_[allfont.ru].ttf'),
+       url('../fonts/exo2.0-thin-webfont.eot');
 }
 
 @font-face {

@@ -10,32 +10,49 @@ class Card extends Component {
 		}
 	}
 
-	changeElementState = () => {
+	changeElementState = (e) => {
 		if(this.props.active != 'disabled') {
 			this.setState(prevState => ({
 				active: !prevState.active
 			}));
+			
+		}		
+	}
+
+	addClassOnMouseHover = (e) => {
+		let card = e.target.closest('.product');
+		
+		if(!card.classList.contains('product--disabled')) {
+			card.classList.add("hovered");
+		}
+	}
+
+	removeClassOnMouseLeave = (e) => {
+		let card = e.target.closest('.product');
+
+		if(!card.classList.contains('product--disabled')) {
+			card.classList.remove("hovered");
 		}		
 	}
 
 	changeProductClassName = () => {
 		let className = [];
+
 		if (this.state.active === 'disabled') {
 			className.push('product product--disabled');
 			return className;
 		}
 		if (!this.state.active) {
-			className = 'product';
+			className.push('product');
 			return className;
 		}
 		if (this.state.active) {
-			className = 'product product--active';
+			className.push('product product--active');
 			return className;
 		}		
 	}
 
 	render() {
-		console.log(this.state.active)
 		const {active} = this.state;
 		const {
 			productName,
@@ -47,8 +64,6 @@ class Card extends Component {
 			feedDescription,
 			approbation
 		} = this.props;
-		 
-
 
 		return (
 			
@@ -56,11 +71,29 @@ class Card extends Component {
 				<style jsx>{`
 				  .product__wrapper {
 				    display: -webkit-flex;display: -moz-flex;display: -ms-flex;display: -o-flex;display: flex;
-				    -webkit-flex-direction: column;-moz-flex-direction: column;-ms-flex-direction: column;-o-flex-direction: column;flex-direction: column;
-				    -ms-align-items: center;align-items: center;			  	
+				    justify-content: center;		    			  	
 				  	max-width: 320px;
 				  	width: 100%;
-				  }				  
+				  }
+				  .product__inner {
+				  	position: relative;
+				  	display: -webkit-flex;display: -moz-flex;display: -ms-flex;display: -o-flex;display: flex;
+				    -webkit-flex-direction: column;-moz-flex-direction: column;-ms-flex-direction: column;-o-flex-direction: column;flex-direction: column;
+				    -ms-align-items: center;align-items: center;
+				  	max-width: 320px;
+				  	width: 100%;
+				  }
+				  .product__inner:after {
+				  	content: '';
+				  	position: absolute;
+				  	left: 20px;
+				  	top: -46px;
+				  	width: 30px;
+				  	height: 65px;
+				  	background-color: transparent;
+				  	transform: translate(-24px, 24px) rotate(45deg);
+				  	z-index: 10;
+				  }		  
 				  .product {
 				  	position: relative;
 				  	display: flex;
@@ -70,54 +103,46 @@ class Card extends Component {
 				  	max-width: 320px;		            
 		            height: 480px;
 		            border-radius: 13px;
-		            background: linear-gradient(135deg, transparent 30px, rgb(22, 152, 217) 0);
 		            box-sizing: border-box;
-		            -webkit-clip-path: polygon(0 100%, 0 8.5%, 13% 0, 100% 0, 100% 100%);
-					clip-path: polygon(0 100%, 0 8.5%, 13% 0, 100% 0, 100% 100%);
-					transition: .3s ease-out;
 					overflow: hidden;
 					user-select: none;
 					cursor: pointer;            
 				  }
-				  .product:hover:not(.product--disabled):after {
-				  	opacity: 1;
+				  .product__mask {
+				  	position: absolute;
+				  	top: 0;
+				  	right: 0;
+				  	bottom: 0;
+				  	left: 0;
+				  	z-index: 5;			  	
 				  }
-				  .product:hover:not(.product--disabled) .product__weight {
+				  .product__mask path {
+				  	transition: .3s ease-out;
+				  }
+				  .product.hovered .product__mask path {
+				  	stroke: rgb(46, 168, 230);
+				  }
+				  .product.hovered .product__weight {
 				  	background-color: rgb(46, 168, 230);
 				  }				  
-				  .product--active {
-				  	background: linear-gradient(135deg, transparent 30px, rgb(217, 22, 103) 0);				  	
-				  }
-				  .product:after,
-				  .product--active:after {					
-					content: '';
-					position: absolute;					
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					transition: .3s ease-out;
-					opacity: 0;					
-					z-index: 2;
-				  }
-				  .product:after {
-				  	background: linear-gradient(135deg, transparent 30px, rgb(46, 168, 230) 0);
-				  }
-				  .product--active:after {
-				  	background: linear-gradient(135deg, transparent 30px, rgb(230, 46, 122) 0);
+				  .product--active .product__mask path {
+				  	stroke: rgb(217, 22, 103);				  	
 				  }
 				  .product--active .product__weight {
 				  	background-color: rgb(217, 22, 103);
 				  }
-				  .product--active:hover:after {
-				  	opacity: 1;
+				  .product--active.hovered .product__mask path{
+				  	stroke: rgb(230, 46, 122);
 				  }
-				  .product.product--active:hover:not(.product--disabled) .product__weight {
+				  .product--active.hovered .product__weight {
 				  	background-color: rgb(230, 46, 122);
-				  }	  
+				  }				  
 				  .product--disabled {
-				  	background: linear-gradient(135deg, transparent 30px, rgb(179, 179, 179) 0);
 				  	cursor: default;
+				  }
+				  .product--disabled .product__mask path {
+				  	stroke: rgb(179, 179, 179);
+				  	fill: rgba(242, 242, 242, 0.4);
 				  }
 				  .product--disabled .product__weight {
 				  	background-color: rgb(179, 179, 179);
@@ -125,26 +150,16 @@ class Card extends Component {
 				  .product--disabled + .product__appeal {
 					color: rgb(255, 255, 102)
 				  }
-				  .product--disabled:before {
-				  	content: '';
-				  	position: absolute;
-				  	top: 0;
-				  	right: 0;
-				  	bottom: 0;
-				  	left: 0;
-				  	background-color: rgba(242, 242, 242, 0.4);
-				  	z-index: 4;
-				  }
 		          .product__card {
 		          	position: relative;
 		          	display: flex;
 		          	flex-direction: column;
+		          	justify-content: space-between;
 		            width: calc(100% - 8px);
 		            height: calc(480px - 8px);
 		            border-radius: 8px;
-		            background: linear-gradient(135deg, transparent 28.5px, #fff 0);
+		            background: linear-gradient(135deg, transparent 28px, #fff 0);
 		            box-sizing: border-box;
-		            overflow: hidden;
 		            z-index: 3;
 		          }
 		          .product__info {
@@ -155,13 +170,13 @@ class Card extends Component {
 		          }
 		          .product__name {
 		          	padding: 6px 0 0 0;
-		          	font-family: "TrebuchetMS Bold";
+		          	font-family: 'TrebuchetMS Bold', arial;
 		          	font-size: 48px;	
 					color: rgb(0, 0, 0);
 					font-weight: bold;
 		          }
 		          .product__stuffing {
-		          	font-family: "TrebuchetMS Bold";
+		          	font-family: 'TrebuchetMS Bold', arial;
 		          	font-size: 24px;					
 					color: rgb(0, 0, 0);
 					font-weight: bold;
@@ -175,7 +190,7 @@ class Card extends Component {
 		          .product-img {
 		          	position: relative;
 		          	height: 100%;
-		          	margin-top: 33px;
+		          	max-height: 269px;
 		          }
 		          .product-img img {
 		          	position: absolute;
@@ -220,6 +235,7 @@ class Card extends Component {
 		          	text-decoration-color: rgb(22, 152, 217);		          	
 		          	color: rgb(22, 152, 217);
 		          	cursor: pointer;
+		          	outline: none;
 		          }
 		          @media (max-width: 1168px) {
 		            .product__wrapper:first-child {
@@ -232,76 +248,83 @@ class Card extends Component {
 		          }		          
 		          `}</style>
 
-				<div className="product__wrapper">					
-					<div
-						className={this.changeProductClassName()}						
-						onClick={this.changeElementState}
-					>
-			        	<div className="product__card">
-				        	<div className="product__info">
-					        	<div className="product__description">{productDescription}</div>
-								<div className="product__name">{productName}</div>
-								<div className="product__stuffing">{productStuffing}</div>
-								<div className="product__compos">
-									<div className="product__compos-portions">
+				<div className="product__wrapper">
+					<div className="product__inner">				
+						<div
+							className={this.changeProductClassName()}						
+							onClick={this.changeElementState}
+							onMouseEnter={this.addClassOnMouseHover}
+							onMouseLeave={this.removeClassOnMouseLeave}
+						>
+						<svg className="product__mask" width="320" height="480" viewBox="0 0 320 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M2 467V43.1599L43.789 2H307C313.075 2 318 6.92487 318 13V467C318 473.075 313.075 478 307 478H13C6.92486 478 2 473.075 2 467Z" fill="none" stroke="#3399CC" strokeWidth="4"/>
+						</svg>
+				        	<div className="product__card">
+					        	<div className="product__info">
+						        	<div className="product__description">{productDescription}</div>
+									<div className="product__name">{productName}</div>
+									<div className="product__stuffing">{productStuffing}</div>
+									<div className="product__compos">
+										<div className="product__compos-portions">
+											{
+												productPortions == 1 &&
+													`${productPortions} порция`
+											}
+											{
+												productPortions >= 2 && productPortions <= 4 &&
+													`${productPortions} порции`
+											}
+											{
+												productPortions >= 5 &&
+													`${productPortions} порций`
+											}
+										</div>
+										<div className="product__compos-gift">
+											{
+												productGift == 1 &&
+													`мышь в подарок`
+											}
+											{
+												productGift >= 2 && productGift <= 4 &&
+													`${productGift} мыши в подарок`
+											}
+											{
+												productGift >= 5 &&
+													`${productGift} мышей в подарок`
+											}
+										</div>
 										{
-											productPortions == 1 &&
-												`${productPortions} порция`
-										}
-										{
-											productPortions >= 2 && productPortions <= 4 &&
-												`${productPortions} порции`
-										}
-										{
-											productPortions >= 5 &&
-												`${productPortions} порций`
+											approbation &&
+											<React.Fragment>
+												<div className="product__compos-approbation">{approbation}</div>
+											</React.Fragment>
 										}
 									</div>
-									<div className="product__compos-gift">
-										{
-											productGift == 1 &&
-												`мышь в подарок`
-										}
-										{
-											productGift >= 2 && productGift <= 4 &&
-												`${productGift} мыши в подарок`
-										}
-										{
-											productGift >= 5 &&
-												`${productGift} мышей в подарок`
-										}
-									</div>
-									{
-										approbation &&
-										<React.Fragment>
-											<div className="product__compos-approbation">{approbation}</div>
-										</React.Fragment>
-									}
+					        	</div>					
+								<div className="product-img">
+									<img src="static/images/Photo.png" alt="product_img"/>
+								</div>					
+								<div className="product__weight">
+									<div className="product__weight-number">{productWeight}</div>
+									<div className="product__weight-unit">кг</div>
 								</div>
-				        	</div>					
-							<div className="product-img">
-								<img src="static/images/Photo.png" alt="product_img"/>
-							</div>					
-							<div className="product__weight">
-								<div className="product__weight-number">{productWeight}</div>
-								<div className="product__weight-unit">кг</div>
-							</div>
-						</div>						
-			        </div>
-			        <div className="product__appeal">
-			        	
-			        	{!active &&
-			        		<React.Fragment>
-				        		<span>Чего сидишь? Порадуй котэ, </span> 
-				        		<button className="product__appeal-button" onClick={this.changeElementState}>купи</button>
-			        		</React.Fragment>
-			        	}
-			        	{active === true &&
-							feedDescription
-			        	}
-			        	{active === 'disabled' &&
-							`Печалька, ${productStuffing} закончился`
-			        	}
+							</div>						
+				        </div>
+				        <div className="product__appeal">
+				        	
+				        	{!active &&
+				        		<React.Fragment>
+					        		<span>Чего сидишь? Порадуй котэ, </span> 
+					        		<button className="product__appeal-button" onClick={this.changeElementState}>купи</button>
+				        		</React.Fragment>
+				        	}
+				        	{active === true &&
+								feedDescription
+				        	}
+				        	{active === 'disabled' &&
+								`Печалька, ${productStuffing} закончился`
+				        	}
+				        </div>
 			        </div>
 				</div>		        
 			</React.Fragment>

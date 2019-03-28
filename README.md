@@ -1,1 +1,1 @@
-Welcome!
+Welcome! You can estimate this page at https://ankompaniets.github.io/cats-on-react/
